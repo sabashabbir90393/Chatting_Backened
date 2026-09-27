@@ -9,11 +9,14 @@ const io = new Server(server, {
   // Images/files ke liye larger payload allow
   maxHttpBufferSize: 10 * 1024 * 1024,
 
-  cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
+ cors: {
+  origin: [
+    "http://localhost:5173",
+    "https://client-bay-omega-91.vercel.app"
+  ],
+  methods: ["GET", "POST"],
+  credentials: true
+},
 });
 
 // Test route
