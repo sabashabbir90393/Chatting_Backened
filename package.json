@@ -1,0 +1,25 @@
+{
+  "name": "chatting_backened",
+  "version": "1.0.0",
+  "description": "It is the server of realtime chat app",
+  "license": "ISC",
+  "author": "saba",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.10.2",
+    "nanoid": "^6.0.1",
+    "nodemon": "^3.1.14",
+    "redis": "^6.2.1",
+    "socket.io": "^4.8.3"
+  }
+}
