@@ -1,4 +1,7 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "fluid": true
+  "functions": {
+    "api/socket-io.js": {
+      "runtime": "nodejs24.x"
+    }
+  }
 }
