@@ -7,6 +7,8 @@ const app = express();
 const server = http.createServer(app);
 
 const io = new Server(server, {
+  path: "/api/socket-io",
+
   maxHttpBufferSize: 10 * 1024 * 1024,
 
   cors: {
@@ -59,9 +61,7 @@ io.on("connection", (socket) => {
       });
     }
 
-    console.log(
-      `${username} joined room: ${roomId}`
-    );
+    console.log(`${username} joined room: ${roomId}`);
 
     io.to(roomId).emit("room-users", {
       room: roomId,
@@ -108,14 +108,9 @@ io.on("connection", (socket) => {
   socket.on("send", (message) => {
     if (!message?.room) return;
 
-    console.log(
-      "Message received:",
-      message
-    );
+    console.log("Message received:", message);
 
-    socket
-      .to(message.room)
-      .emit("message", message);
+    socket.to(message.room).emit("message", message);
   });
 
   // ============================
@@ -127,10 +122,7 @@ io.on("connection", (socket) => {
 
     socket.leave(roomId);
 
-    removeUserFromRoom(
-      socket,
-      roomId
-    );
+    removeUserFromRoom(socket, roomId);
 
     console.log(
       `${socket.username || socket.id} left room: ${roomId}`
@@ -149,14 +141,10 @@ io.on("connection", (socket) => {
       socket.username || socket.id
     );
 
-    const roomId =
-      socket.currentRoom;
+    const roomId = socket.currentRoom;
 
     if (roomId) {
-      removeUserFromRoom(
-        socket,
-        roomId
-      );
+      removeUserFromRoom(socket, roomId);
 
       emitRoomUsers(roomId);
     }
@@ -167,28 +155,19 @@ io.on("connection", (socket) => {
 // REMOVE USER
 // =================================
 
-function removeUserFromRoom(
-  socket,
-  roomId
-) {
-  const users =
-    roomUsers.get(roomId);
+function removeUserFromRoom(socket, roomId) {
+  const users = roomUsers.get(roomId);
 
   if (!users) return;
 
-  const updatedUsers =
-    users.filter(
-      (user) =>
-        user.socketId !== socket.id
-    );
+  const updatedUsers = users.filter(
+    (user) => user.socketId !== socket.id
+  );
 
   if (updatedUsers.length === 0) {
     roomUsers.delete(roomId);
   } else {
-    roomUsers.set(
-      roomId,
-      updatedUsers
-    );
+    roomUsers.set(roomId, updatedUsers);
   }
 
   socket.currentRoom = null;
@@ -199,20 +178,16 @@ function removeUserFromRoom(
 // =================================
 
 function emitRoomUsers(roomId) {
-  const users =
-    roomUsers.get(roomId) || [];
+  const users = roomUsers.get(roomId) || [];
 
-  io.to(roomId).emit(
-    "room-users",
-    {
-      room: roomId,
+  io.to(roomId).emit("room-users", {
+    room: roomId,
 
-      users: users.map((user) => ({
-        socketId: user.socketId,
-        username: user.username,
-      })),
-    }
-  );
+    users: users.map((user) => ({
+      socketId: user.socketId,
+      username: user.username,
+    })),
+  });
 }
 
 export default server;
