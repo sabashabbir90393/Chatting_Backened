@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "api/socket-io.js": {
-      "runtime": "nodejs24.x"
-    }
-  }
-}
